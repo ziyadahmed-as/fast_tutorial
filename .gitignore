@@ -29,6 +29,8 @@ fast/
 *.db
 *.sqlite
 *.sqlite3
+tests/
+.venv/
 
 # IDE
 .vscode/
