@@ -10,12 +10,18 @@ from alembic import context
 # access to the values within the .ini file in use.
 config = context.config
 
-# Import project settings and Base metadata
-from app.config.settings import settings
+# Import project settings and Base metadata with safe fallback
+import os
+try:
+    from app.config.settings import settings
+    db_url = settings.database_url
+except Exception:
+    # Fallback to env var or default SQLite for Alembic runs
+    db_url = os.getenv('DATABASE_URL', 'sqlite:///./test.db')
 from app.database import Base
 
-# Override sqlalchemy URL with Settings value
-config.set_main_option('sqlalchemy.url', settings.database_url)
+# Override sqlalchemy URL with resolved value
+config.set_main_option('sqlalchemy.url', db_url)
 
 # Logging configuration
 if config.config_file_name is not None:
