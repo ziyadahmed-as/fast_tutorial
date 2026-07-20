@@ -10,7 +10,13 @@ from app.modules.users.dependencies import create_session_factory
 
 def create_app(database_url: str | None = None) -> FastAPI:
     configure_logging()
-    app = FastAPI(title="ERP Platform Foundation", version="0.1.0")
+    app = FastAPI(
+        title="ERP Platform Foundation",
+        version="0.1.0",
+        docs_url="/docs",
+        redoc_url="/redoc",
+        openapi_url="/openapi.json",
+    )
 
     app.state.db_session_factory = create_session_factory(database_url or "sqlite:///./app.db")
     app.include_router(users_router, prefix="/api/v1")
